@@ -19,6 +19,7 @@ grammar = r'''
            | "alert"
 
     !protocol: "ip"
+             | "ipv6"
              | "tcp"
              | "udp"
              | "icmp"
@@ -40,6 +41,9 @@ grammar = r'''
              | "krb5"
              | "ntp"
              | "dhcp"
+             | "pkthdr"
+             | "ftp-data"
+             | "tcp-pkt"
 
     ?target: any
            | target_spec
@@ -92,7 +96,7 @@ grammar = r'''
     option: KEYWORD ";"
           | KEYWORD ":" settings ";"
 
-    KEYWORD: /[a-z_.]+/i
+    KEYWORD: /[a-zA-Z0-9_.\-]+/i
 
     settings: string
             | "!" string   -> negated_settings
@@ -100,7 +104,7 @@ grammar = r'''
 
     string: STRING
 
-    LITERAL: /(?!\s+)([^;\\"]|(?!\\)\\[;\\"])+(?!\s+)/
+    LITERAL: /.*:(.+(?=;))/
 '''
 
 parser = Lark(
